@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #include <GroupLayout.h>
-#include <GroupLayoutBuilder.h>
+#include <LayoutBuilder.h>
 #include <Dragger.h>
 #include <StringView.h>
 
@@ -41,40 +41,51 @@ MainWindow::MainWindow(void)
 }
 
 MainView::MainView()
-	:	BView("Big Clock", B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE | B_PULSE_NEEDED, new BGroupLayout(B_HORIZONTAL))
+	:	BView("Big Clock", B_WILL_DRAW | B_PULSE_NEEDED, new BGroupLayout(B_VERTICAL))
 {
 	bigFont = new BFont(be_plain_font);
 	bigFont->SetSize(bigFont->Size() * 10); // 10em
 	
-	lblTime.SetAlignment(B_ALIGN_CENTER);
-	lblTime.SetFont(bigFont);
-	lblTime.SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET)); // Allow scaling sideways
+    lblTime = new BStringView{"lblTime", "10:25"};
+	lblTime->SetAlignment(B_ALIGN_CENTER);
+	lblTime->SetFont(bigFont);
+	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET)); // Allow scaling sideways
 	
-	lblDate.SetAlignment(B_ALIGN_CENTER);
-  //lblDate.SetFont(be_plain_font);
-	lblDate.SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
+    lblDate = new BStringView{"lblDate", "Saturday 4 May, 2019"};
+	lblDate->SetAlignment(B_ALIGN_CENTER);
+  //lblDate->SetFont(be_plain_font);
+	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 	
-	rplDragger = new BDragger{BRect(0,0,7,7), this, B_FOLLOW_RIGHT | B_FOLLOW_BOTTOM};
+	rplDragger = new BDragger{BRect(0,0,7,7), this, B_FOLLOW_NONE};
 	
-	AddChild(BGroupLayoutBuilder(B_VERTICAL, 10)
+	BLayoutBuilder::Group<>(this, B_VERTICAL, 10)
 		.AddGlue()
-		.Add(&lblTime)
-		.Add(&lblDate)
+		.Add(lblTime)
+		.Add(lblDate)
 		.AddGlue()
 		.Add(rplDragger)
-	);
+	.End();
 	
-	tmrTicky = new BMessageRunner(BMessenger(this), new BMessage(M_Tick), 1000000);
-	if(tmrTicky->InitCheck() != B_OK) printf("tmrTicky didn't init properly!\n");
+	SetDrawingMode(B_OP_OVER);
+	
+	//tmrTicky = new BMessageRunner(BMessenger(this), new BMessage(M_Tick), 1000000);
+	//if(tmrTicky->InitCheck() != B_OK) printf("tmrTicky didn't init properly!\n");
 	Tick(); // Update the display immediately
 }
 
 MainView::MainView(BMessage *data)
 	: BView(data)
 {
-	
+	lblTime = dynamic_cast<BStringView*>(FindView("lblTime"));
+    lblDate = dynamic_cast<BStringView*>(FindView("lblDate"));
 }
 
+MainView::~MainView()
+{
+	//delete bigFont;
+	delete lblTime;
+	delete lblDate;
+}
 status_t
 MainView::Archive(BMessage* data, bool deep) const
 {	
@@ -95,14 +106,13 @@ MainView::Instantiate(BMessage *data)
 void
 MainView::Tick()
 {
-	printf("Tick!\n");
 	time_t curTime = time(NULL);
 	struct tm *loctime = localtime(&curTime);
 	BString formatted;
 	BTimeFormat fmTime;
 	BDateFormat fmDate;
 	
-	lblTime.SetText(BString() <<
+	lblTime->SetText(BString() <<
 		loctime->tm_hour << ":" <<
 		loctime->tm_min << ":" <<
 		loctime->tm_sec
@@ -110,24 +120,22 @@ MainView::Tick()
 	
 	//formatted = "";
 	fmTime.Format(formatted, curTime, B_MEDIUM_TIME_FORMAT);
-	lblTime.SetText(formatted);
+	lblTime->SetText(formatted);
 	
 	formatted = "";
 	fmDate.Format(formatted, curTime, B_FULL_DATE_FORMAT);
-	lblDate.SetText(formatted);
+	lblDate->SetText(formatted);
 }
 
 void
 MainView::Pulse()
 {
-	printf("Bing - ");
 	this->Tick();
 }
 
 void
 MainView::MessageReceived(BMessage *msg)
 {
-	printf("msgr\n");
 	switch (msg->what)
 	{
 		case M_Tick:

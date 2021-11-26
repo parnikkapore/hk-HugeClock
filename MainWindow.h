@@ -13,22 +13,23 @@
 class MainView : public BView
 {
 public:
-						MainView(BMessage* data);
-						MainView();
-		virtual void	MessageReceived(BMessage *msg);
-		void			Tick();
-		virtual void	Pulse();
+						    MainView(BMessage* data);
+						    MainView();
+						    ~MainView();
+		void	            MessageReceived(BMessage *msg);
+		void			    Tick();
+		void	            Pulse();
 		
-		virtual status_t	Archive(BMessage* data, bool deep) const;
-		static BArchivable*	Instantiate(BMessage* data);
+		status_t	        Archive(BMessage* data, bool deep) const;
+		static BArchivable* Instantiate(BMessage* data);
 			
 private:
-		BFont* 			bigFont;
-		BMessageRunner* tmrTicky;
-		BDragger*		rplDragger;	
+		BFont* 			    bigFont;
+	    //BMessageRunner*   tmrTicky;
+		BDragger*		    rplDragger;	
 			
-		BStringView		lblTime{"lblTime", "10:25"};
-		BStringView		lblDate{"lblDate", "Saturday 4 May, 2019"};
+		BStringView*		lblTime;
+		BStringView*		lblDate;
 };
 
 class MainWindow : public BWindow
