@@ -1,2 +1,4 @@
 (Objects.*)/**
+objects*
 BigClock
+compile_commands.json

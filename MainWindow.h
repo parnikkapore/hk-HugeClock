@@ -19,17 +19,19 @@ public:
 		void	            MessageReceived(BMessage *msg);
 		void			    Tick();
 		void	            Pulse();
-		
+
 		status_t	        Archive(BMessage* data, bool deep) const;
 		static BArchivable* Instantiate(BMessage* data);
-			
+
 private:
 		BFont* 			    bigFont;
 	    //BMessageRunner*   tmrTicky;
-		BDragger*		    rplDragger;	
-			
+		BDragger*		    rplDragger;
+
 		BStringView*		lblTime;
 		BStringView*		lblDate;
+
+		void				Initialize();
 };
 
 class MainWindow : public BWindow
@@ -38,7 +40,7 @@ public:
 						MainWindow(void);
 		MainView*		mainView;
 		bool			QuitRequested(void);
-			
+
 private:
 };
 
