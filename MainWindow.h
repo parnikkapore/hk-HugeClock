@@ -17,6 +17,7 @@ public:
 						    MainView();
 						    ~MainView();
 		void	            MessageReceived(BMessage *msg);
+		void				AllAttached();
 		void			    Tick();
 		void	            Pulse();
 

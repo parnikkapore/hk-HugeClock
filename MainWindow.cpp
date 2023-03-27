@@ -97,6 +97,16 @@ MainView::Initialize()
 	Tick(); // Update the display immediately
 }
 
+void
+MainView::AllAttached()
+{
+	// Set the transparency of the labels again, as they are overrided on attach. Why.
+	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
+	lblTime->SetDrawingMode(B_OP_ALPHA);
+	lblDate->SetViewColor(B_TRANSPARENT_COLOR);
+	lblDate->SetDrawingMode(B_OP_OVER);
+}
+
 status_t
 MainView::Archive(BMessage* data, bool deep) const
 {
