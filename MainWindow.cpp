@@ -41,7 +41,7 @@ MainWindow::MainWindow(void)
 }
 
 MainView::MainView()
-	: BView("Big Clock", B_WILL_DRAW | B_PULSE_NEEDED, new BGroupLayout(B_VERTICAL))
+	: BView("Big Clock", B_WILL_DRAW | B_PULSE_NEEDED | B_TRANSPARENT_BACKGROUND, new BGroupLayout(B_VERTICAL))
 {
 	Initialize();
 }
@@ -49,6 +49,7 @@ MainView::MainView()
 MainView::MainView(BMessage *data)
 	: BView(data)
 {
+	SetViewColor(B_TRANSPARENT_COLOR);
 	Initialize();
 }
 
@@ -68,10 +69,14 @@ MainView::Initialize()
     lblTime = new BStringView{"lblTime", "10:25"};
 	lblTime->SetAlignment(B_ALIGN_CENTER);
 	lblTime->SetFont(bigFont);
+	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
+	lblTime->SetDrawingMode(B_OP_OVER);
 	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET)); // Allow scaling sideways
 
     lblDate = new BStringView{"lblDate", "Saturday 4 May, 2019"};
 	lblDate->SetAlignment(B_ALIGN_CENTER);
+	lblDate->SetViewColor(B_TRANSPARENT_COLOR);
+	lblDate->SetDrawingMode(B_OP_ALPHA);
   //lblDate->SetFont(be_plain_font);
 	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
