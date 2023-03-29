@@ -19,35 +19,25 @@ enum {
 };
 
 MainWindow::MainWindow(void)
-	: BWindow(BRect(100,100,500,400),"Big Clock",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS | B_AUTO_UPDATE_SIZE_LIMITS)
+	: BWindow(BRect(100,100,500,400), "Big Clock", B_TITLED_WINDOW,
+			B_ASYNCHRONOUS_CONTROLS | B_AUTO_UPDATE_SIZE_LIMITS)
 {
 	mainView = new MainView();
 	SetPulseRate(1000000);
 	SetLayout(new BGroupLayout(B_VERTICAL));
 
 	AddChild(mainView);
-
-	// Testing purposes
-	/*
-	BMessage* tstArch = new BMessage();
-	mainView->Archive(tstArch, true);
-	tstArch->PrintToStream();
-
-	BArchivable* restorer = instantiate_object(tstArch);
-	MainView* restored = NULL;
-	if(restorer) restored = dynamic_cast<MainView*>(restorer);
-	else		perror("Restore test failed?!: ");
-	*/
 }
 
 MainView::MainView()
-	: BView("Big Clock", B_WILL_DRAW | B_PULSE_NEEDED | B_TRANSPARENT_BACKGROUND, new BGroupLayout(B_VERTICAL))
+	: BView("Big Clock",
+			B_WILL_DRAW | B_PULSE_NEEDED | B_TRANSPARENT_BACKGROUND,
+			new BGroupLayout(B_VERTICAL))
 {
 	Initialize();
 }
 
-MainView::MainView(BMessage *data)
-	: BView(data)
+MainView::MainView(BMessage *data) : BView(data)
 {
 	SetViewColor(B_TRANSPARENT_COLOR);
 	Initialize();
@@ -55,7 +45,7 @@ MainView::MainView(BMessage *data)
 
 MainView::~MainView()
 {
-	//delete bigFont;
+	delete bigFont;
 	delete lblTime;
 	delete lblDate;
 }
@@ -71,13 +61,14 @@ MainView::Initialize()
 	lblTime->SetFont(bigFont);
 	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
 	lblTime->SetDrawingMode(B_OP_OVER);
-	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET)); // Allow scaling sideways
+	// Allow scaling sideways
+	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
     lblDate = new BStringView{"lblDate", "Saturday 4 May, 2019"};
 	lblDate->SetAlignment(B_ALIGN_CENTER);
 	lblDate->SetViewColor(B_TRANSPARENT_COLOR);
 	lblDate->SetDrawingMode(B_OP_ALPHA);
-  //lblDate->SetFont(be_plain_font);
+    // lblDate->SetFont(be_plain_font);
 	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
 	rplDragger = new BDragger{BRect(0,0,7,7), this, B_FOLLOW_NONE};
@@ -100,6 +91,8 @@ MainView::Initialize()
 void
 MainView::AllAttached()
 {
+	BView::AllAttached();
+
 	// Set the transparency of the labels again, as they are overrided on attach. Why.
 	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
 	lblTime->SetDrawingMode(B_OP_ALPHA);
@@ -115,7 +108,6 @@ MainView::Archive(BMessage* data, bool deep) const
 	data->AddString("class", "MainView");
 	data->AddString("add_on", appSignature);
 
-	printf("Archived: %d\n", status);
 	return status;
 }
 
@@ -133,12 +125,6 @@ MainView::Tick()
 	BString formatted;
 	BTimeFormat fmTime;
 	BDateFormat fmDate;
-
-	lblTime->SetText(BString() <<
-		loctime->tm_hour << ":" <<
-		loctime->tm_min << ":" <<
-		loctime->tm_sec
-	);
 
 	//formatted = "";
 	fmTime.Format(formatted, curTime, B_MEDIUM_TIME_FORMAT);
