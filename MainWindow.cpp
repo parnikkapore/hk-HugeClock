@@ -10,6 +10,7 @@
 #include <LayoutBuilder.h>
 #include <Dragger.h>
 #include <StringView.h>
+#include <Alert.h>
 
 #include "MainWindow.h"
 
@@ -142,18 +143,30 @@ MainView::Pulse()
 }
 
 void
+MainView::ShowAbout()
+{
+	BAlert *alert = new BAlert(
+		"about",
+		"BigClock v0.1a\n"
+		"Copyright 2019-2023 Parnikkapore",
+		"OK"
+	);
+	alert->Go();
+}
+
+void
 MainView::MessageReceived(BMessage *msg)
 {
-	switch (msg->what)
-	{
+	switch (msg->what) {
 		case M_Tick:
 			Tick();
 			break;
+		case B_ABOUT_REQUESTED:
+			ShowAbout();
+			break;
 		default:
-		{
 			BView::MessageReceived(msg);
 			break;
-		}
 	}
 }
 

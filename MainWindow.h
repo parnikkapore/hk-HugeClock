@@ -33,6 +33,7 @@ private:
 		BStringView*		lblDate;
 
 		void				Initialize();
+		void				ShowAbout();
 };
 
 class MainWindow : public BWindow
