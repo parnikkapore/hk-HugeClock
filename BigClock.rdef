@@ -9,3 +9,10 @@ resource vector_icon {
 	$"524A4C4C4E484A050A000100201E200A010100301E2001178100040A01010120"
 	$"1E200A020102201E200A030403040506381C2020FF0117810004"
 };
+
+resource app_version {
+	0, 1, 1, B_APPV_ALPHA, 0,
+	"Nice and large clock replicant",
+	"A large, Conky-inspired clock display intended to be a replicant!"
+	  " Although of course you can run it as an app as well."
+};

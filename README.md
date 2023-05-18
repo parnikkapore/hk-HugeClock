@@ -1,7 +1,7 @@
 # hk-HugeClock
 ### A nice and large clock application for Haiku
 
-## What is this?
+## What's this?
 
 It's a large, Conky-inspired clock display intended to be a replicant! Although of course you can run it as an app as well.
 
@@ -9,8 +9,6 @@ It's a large, Conky-inspired clock display intended to be a replicant! Although 
 
 ## Compiling
 
-This project is made using [Paladin](https://depot.haiku-os.org/#!/pkg/paladin/haikuports/2/0/-/-/1/x86_64) and should not have any dependencies outside the default install. Simply download the IDE, hit Compile in there, make sure the attributes are set properly, and you're good to go!
+We use pretty much the standard makefile engine setup. Simply run `make` at the top directory and you should be good to go!
 
-## Install notes
-
-You might have to manually set the app signature to get the replicant to work. The signature should be `application/x-vnd.pnkp-HugeClock`.
+This project does not have any dependencies beyond the C++ development environment.
