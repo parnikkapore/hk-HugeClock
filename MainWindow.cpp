@@ -35,11 +35,13 @@ MainView::MainView()
 			B_WILL_DRAW | B_PULSE_NEEDED | B_TRANSPARENT_BACKGROUND,
 			new BGroupLayout(B_VERTICAL))
 {
+	isReplicant = false;
 	Initialize();
 }
 
 MainView::MainView(BMessage *data) : BView(data)
 {
+	isReplicant = true;
 	SetViewColor(B_TRANSPARENT_COLOR);
 	Initialize();
 }
@@ -60,15 +62,11 @@ MainView::Initialize()
     lblTime = new BStringView{"lblTime", "10:25"};
 	lblTime->SetAlignment(B_ALIGN_CENTER);
 	lblTime->SetFont(bigFont);
-	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
-	lblTime->SetDrawingMode(B_OP_OVER);
 	// Allow scaling sideways
 	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
     lblDate = new BStringView{"lblDate", "Saturday 4 May, 2019"};
 	lblDate->SetAlignment(B_ALIGN_CENTER);
-	lblDate->SetViewColor(B_TRANSPARENT_COLOR);
-	lblDate->SetDrawingMode(B_OP_ALPHA);
     // lblDate->SetFont(be_plain_font);
 	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
@@ -82,10 +80,11 @@ MainView::Initialize()
 		.Add(rplDragger)
 	.End();
 
-	SetDrawingMode(B_OP_OVER);
+	// SetDrawingMode(B_OP_OVER);
+	SetLabelColors();
 
-	//tmrTicky = new BMessageRunner(BMessenger(this), new BMessage(M_Tick), 1000000);
-	//if(tmrTicky->InitCheck() != B_OK) printf("tmrTicky didn't init properly!\n");
+	// tmrTicky = new BMessageRunner(BMessenger(this), new BMessage(M_Tick), 1000000);
+	// if(tmrTicky->InitCheck() != B_OK) printf("tmrTicky didn't init properly!\n");
 	Tick(); // Update the display immediately
 }
 
@@ -93,10 +92,18 @@ void
 MainView::AllAttached()
 {
 	BView::AllAttached();
+	SetLabelColors();
+}
 
-	// Set the transparency of the labels again, as they are overrided on attach. Why.
+void
+MainView::SetLabelColors()
+{
+	// the defaults are fine if we're in a window
+	if(!isReplicant) return;
+
+	// For replicants, set the transparency of the labels again, as they are overrided on attach. Why.
 	lblTime->SetViewColor(B_TRANSPARENT_COLOR);
-	lblTime->SetDrawingMode(B_OP_ALPHA);
+	lblTime->SetDrawingMode(B_OP_OVER);
 	lblDate->SetViewColor(B_TRANSPARENT_COLOR);
 	lblDate->SetDrawingMode(B_OP_OVER);
 }
@@ -127,7 +134,7 @@ MainView::Tick()
 	BTimeFormat fmTime;
 	BDateFormat fmDate;
 
-	//formatted = "";
+	// formatted = "";
 	fmTime.Format(formatted, curTime, B_MEDIUM_TIME_FORMAT);
 	lblTime->SetText(formatted);
 
@@ -147,7 +154,7 @@ MainView::ShowAbout()
 {
 	BAlert *alert = new BAlert(
 		"about",
-		"BigClock v0.1a\n"
+		"BigClock v0.1.1a\n"
 		"Copyright 2019-2023 Parnikkapore",
 		"OK"
 	);

@@ -26,13 +26,16 @@ public:
 
 private:
 		BFont* 			    bigFont;
-	    //BMessageRunner*   tmrTicky;
+	    // BMessageRunner*  tmrTicky;
 		BDragger*		    rplDragger;
 
 		BStringView*		lblTime;
 		BStringView*		lblDate;
 
+		bool				isReplicant;
+
 		void				Initialize();
+		void				SetLabelColors();
 		void				ShowAbout();
 };
 
