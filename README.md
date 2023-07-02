@@ -1,4 +1,4 @@
-# hk-HugeClock
+# Big Clock
 ### A nice and large clock application for Haiku
 
 ## What's this?
