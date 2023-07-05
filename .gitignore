@@ -1,4 +1,6 @@
 (Objects.*)/**
 objects*
 BigClock
+*.hpkg
+_build-package
 compile_commands.json
