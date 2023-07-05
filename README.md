@@ -12,3 +12,5 @@ It's a large, Conky-inspired clock display intended to be a replicant! Although 
 We use pretty much the standard makefile engine setup. Simply run `make` at the top directory and you should be good to go!
 
 This project does not have any dependencies beyond the C++ development environment.
+
+A .hpkg package may be created by running `make package`.

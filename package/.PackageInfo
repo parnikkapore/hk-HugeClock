@@ -1,0 +1,22 @@
+name            BigClock
+version         0.1.1-1
+architecture    x86_64
+
+summary         "Nice and large clock replicant"
+urls            "https://github.com/parnikkapore/hk-HugeClock/"
+description     "A large, Conky-inspired clock display intended to be a replicant! Although of course you can run it as an app as well."
+
+packager        "Parnikkapore"
+vendor          "Parnikkapore"
+
+copyrights      "2019-2023 Parnikkapore"
+licenses        "MPL v2.0"
+
+provides {
+  BigClock = 0.1.1-1
+  app:BigClock = 0.1.1
+}
+
+requires {
+  haiku >= r1~beta2
+}

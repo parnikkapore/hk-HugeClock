@@ -133,3 +133,31 @@ DRIVER_PATH =
 DEVEL_DIRECTORY := \
 	$(shell findpaths -r "makefile_engine" B_FIND_PATH_DEVELOP_DIRECTORY)
 include $(DEVEL_DIRECTORY)/etc/makefile-engine
+
+# Package creation #############################################################
+
+PACKAGE_DIR := .
+
+TARGET_FILENAME := $(basename $(TARGET))
+$(PACKAGE_DIR)/$(NAME).hpkg: $(TARGET) package/.PackageInfo
+	# Set up the package structure
+	cp -r package _build_package
+	mkdir -p _build_package/apps
+	cp '$(TARGET)' _build_package/apps/'$(TARGET_FILENAME)'
+	mkdir -p _build_package/data/deskbar/menu/Applications/
+	(cd _build_package/data/deskbar/menu/Applications/; \
+	 ln -s ../../../../apps/'$(TARGET_FILENAME)' .)
+	mkdir -p _build_package/data/mime_db/
+	mimeset --all --mimedb _build_package/data/mime_db/ --mimedb /system/data/mime_db/ '$(TARGET)'
+	# Generate the package
+	mkdir -p '$(PACKAGE_DIR)'
+	package create -C _build_package '$(PACKAGE_DIR)'/'$(NAME)'.hpkg
+	# And clean up
+	rm -r _build_package
+package: $(PACKAGE_DIR)/$(NAME).hpkg
+
+rmpackage:
+	-rm -rf _build_package
+	-rm -f '$(PACKAGE_DIR)'/'$(NAME)'.hpkg
+
+.PHONY: package rmpackage
