@@ -18,6 +18,7 @@ public:
 						    ~MainView();
 		void	            MessageReceived(BMessage *msg);
 		void				AllAttached();
+		void				FrameResized(float width, float height);
 		void			    Tick();
 		void	            Pulse();
 
@@ -26,6 +27,7 @@ public:
 
 private:
 		BFont* 			    bigFont;
+		BFont*				smallFont;
 	    // BMessageRunner*  tmrTicky;
 		BDragger*		    rplDragger;
 
@@ -34,8 +36,9 @@ private:
 
 		bool				isReplicant;
 
-		void				Initialize();
+		void				Initialize(float bigSize, float smallSize);
 		void				SetLabelColors();
+		void				SetTimeFont();
 		void				ShowAbout();
 };
 
