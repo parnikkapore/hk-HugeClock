@@ -59,18 +59,18 @@ MainView::Initialize()
 	bigFont = new BFont(be_plain_font);
 	bigFont->SetSize(bigFont->Size() * 10); // 10em
 
-    lblTime = new BStringView{"lblTime", "10:25"};
+    lblTime = new BStringView("lblTime", "10:25");
 	lblTime->SetAlignment(B_ALIGN_CENTER);
 	lblTime->SetFont(bigFont);
 	// Allow scaling sideways
 	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
-    lblDate = new BStringView{"lblDate", "Saturday 4 May, 2019"};
+    lblDate = new BStringView("lblDate", "Saturday 4 May, 2019");
 	lblDate->SetAlignment(B_ALIGN_CENTER);
     // lblDate->SetFont(be_plain_font);
 	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
-	rplDragger = new BDragger{BRect(0,0,7,7), this, B_FOLLOW_NONE};
+	rplDragger = new BDragger(BRect(0,0,7,7), this, B_FOLLOW_NONE);
 
 	BLayoutBuilder::Group<>(this, B_VERTICAL, 10)
 		.AddGlue()
@@ -111,6 +111,8 @@ MainView::SetLabelColors()
 status_t
 MainView::Archive(BMessage* data, bool deep) const
 {
+	(void)deep; // unused-parameter
+
 	// Don't archive the child views - we'll do it ourselves
 	status_t status = BView::Archive(data, false);
 	data->AddString("class", "MainView");
@@ -129,7 +131,6 @@ void
 MainView::Tick()
 {
 	time_t curTime = time(NULL);
-	struct tm *loctime = localtime(&curTime);
 	BString formatted;
 	BTimeFormat fmTime;
 	BDateFormat fmDate;
