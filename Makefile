@@ -144,8 +144,8 @@ $(PACKAGE_DIR)/$(NAME).hpkg: $(TARGET) package/.PackageInfo
 	cp -r package _build_package
 	mkdir -p _build_package/apps
 	cp '$(TARGET)' _build_package/apps/'$(TARGET_FILENAME)'
-	mkdir -p _build_package/data/deskbar/menu/Applications/
-	(cd _build_package/data/deskbar/menu/Applications/; \
+	mkdir -p '_build_package/data/deskbar/menu/Desktop applets/'
+	(cd '_build_package/data/deskbar/menu/Desktop applets/'; \
 	 ln -s ../../../../apps/'$(TARGET_FILENAME)' .)
 	mkdir -p _build_package/data/mime_db/
 	mimeset --all --mimedb _build_package/data/mime_db/ --mimedb /system/data/mime_db/ '$(TARGET)'
