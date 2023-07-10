@@ -11,7 +11,7 @@ resource vector_icon {
 };
 
 resource app_version {
-	0, 1, 1, B_APPV_ALPHA, 0,
+	0, 1, 1, B_APPV_ALPHA, 2,
 	"Nice and large clock replicant",
 	"A large, Conky-inspired clock display intended to be a replicant!"
 	  " Although of course you can run it as an app as well."

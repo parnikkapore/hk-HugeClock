@@ -1,5 +1,5 @@
 name            BigClock
-version         0.1.1-1
+version         0.1.1-2
 architecture    @ARCH@
 
 summary         "Nice and large clock replicant"
@@ -13,7 +13,7 @@ copyrights      "2019-2023 Parnikkapore"
 licenses        "MPL v2.0"
 
 provides {
-  BigClock = 0.1.1-1
+  BigClock = 0.1.1-2
   app:BigClock = 0.1.1
 }
 
