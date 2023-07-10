@@ -139,6 +139,7 @@ TARGET_FILENAME := $(basename $(TARGET))
 $(PACKAGE_DIR)/$(NAME).hpkg: $(TARGET) package/.PackageInfo
 	# Set up the package structure
 	cp -r package _build_package
+	sed s/@ARCH@/$$(getarch)/g < package/.PackageInfo > _build_package/.PackageInfo
 	mkdir -p _build_package/apps
 	cp '$(TARGET)' _build_package/apps/'$(TARGET_FILENAME)'
 	mkdir -p '_build_package/data/deskbar/menu/Desktop applets/'

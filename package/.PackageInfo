@@ -1,6 +1,6 @@
 name            BigClock
 version         0.1.1-1
-architecture    x86_64
+architecture    @ARCH@
 
 summary         "Nice and large clock replicant"
 urls            "https://github.com/parnikkapore/hk-HugeClock/"
