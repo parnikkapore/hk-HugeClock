@@ -68,15 +68,15 @@ MainView::Initialize(float bigSize, float smallSize)
 	smallFont = new BFont(be_plain_font);
 	smallFont->SetSize(smallSize);
 
-    lblTime = new BStringView("lblTime", "10:25");
+	lblTime = new BStringView("lblTime", "10:25");
 	lblTime->SetAlignment(B_ALIGN_CENTER);
 	lblTime->SetFont(bigFont);
 	// Allow scaling sideways
 	lblTime->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
-    lblDate = new BStringView("lblDate", "Saturday 4 May, 2019");
+	lblDate = new BStringView("lblDate", "Saturday 4 May, 2019");
 	lblDate->SetAlignment(B_ALIGN_CENTER);
-    // lblDate->SetFont(smallFont);
+	// lblDate->SetFont(smallFont);
 	lblDate->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
 	rplDragger = new BDragger(BRect(0,0,7,7), this, B_FOLLOW_NONE);

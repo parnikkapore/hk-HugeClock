@@ -13,33 +13,33 @@
 class MainView : public BView
 {
 public:
-						    MainView(BMessage* data);
-						    MainView();
-						    ~MainView();
+							MainView(BMessage* data);
+							MainView();
+							~MainView();
 
-		void	            MessageReceived(BMessage *msg);
+		void				MessageReceived(BMessage *msg);
 		void				AllAttached();
 		void				FrameResized(float width, float height);
-		void	            Pulse();
+		void				Pulse();
 
-		status_t	        Archive(BMessage* data, bool deep) const;
-		static BArchivable* Instantiate(BMessage* data);
+		status_t			Archive(BMessage* data, bool deep) const;
+		static BArchivable*	Instantiate(BMessage* data);
 
 private:
-		BDragger*		    rplDragger;
+		BDragger*			rplDragger;
 		BStringView*		lblTime;
 		BStringView*		lblDate;
 
-		BFont* 			    bigFont;
+		BFont* 				bigFont;
 		BFont*				smallFont;
-	    // BMessageRunner*  tmrTicky;
+		// BMessageRunner*	tmrTicky;
 
 		bool				isReplicant;
 
 		void				Initialize(float bigSize, float smallSize);
 		void				SetLabelColors();
 		void				SetTimeFont();
-		void			    Tick();
+		void				Tick();
 		void				ShowAbout();
 };
 
