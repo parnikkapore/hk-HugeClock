@@ -31,6 +31,15 @@ MainWindow::MainWindow(void)
 	AddChild(mainView);
 }
 
+bool
+MainWindow::QuitRequested(void)
+{
+	be_app->PostMessage(B_QUIT_REQUESTED);
+	return true;
+}
+
+/**/
+
 MainView::MainView()
 	: BView("Big Clock",
 			B_WILL_DRAW | B_PULSE_NEEDED | B_TRANSPARENT_BACKGROUND | B_FRAME_EVENTS,
@@ -49,12 +58,6 @@ MainView::MainView(BMessage *data) : BView(data)
 	data->FindFloat("MainView::bigSize", &bigSize);
 	data->FindFloat("MainView::smallSize", &smallSize);
 	Initialize(bigSize, smallSize);
-}
-
-MainView::~MainView()
-{
-	delete bigFont;
-	delete smallFont;
 }
 
 void
@@ -97,12 +100,75 @@ MainView::Initialize(float bigSize, float smallSize)
 	Tick(); // Update the display immediately
 }
 
+MainView::~MainView()
+{
+	delete bigFont;
+	delete smallFont;
+}
+
+/**/
+
+status_t
+MainView::Archive(BMessage* data, bool deep) const
+{
+	(void)deep; // unused-parameter
+
+	// Don't archive the child views - we'll do it ourselves
+	status_t status = BView::Archive(data, false);
+	data->AddString("class", "MainView");
+	data->AddString("add_on", appSignature);
+	data->AddFloat("MainView::bigSize", bigFont->Size());
+	data->AddFloat("MainView::smallSize", smallFont->Size());
+
+	return status;
+}
+
+BArchivable*
+MainView::Instantiate(BMessage *data)
+{
+	if (validate_instantiation(data, "MainView")) return new MainView(data);
+	return NULL;
+}
+
+/**/
+
 void
 MainView::AllAttached()
 {
 	BView::AllAttached();
 	SetLabelColors();
 }
+
+void
+MainView::MessageReceived(BMessage *msg)
+{
+	switch (msg->what) {
+		case M_Tick:
+			Tick();
+			break;
+		case B_ABOUT_REQUESTED:
+			ShowAbout();
+			break;
+		default:
+			BView::MessageReceived(msg);
+			break;
+	}
+}
+
+void
+MainView::Pulse()
+{
+	this->Tick();
+}
+
+void
+MainView::FrameResized(float width, float height)
+{
+	BView::FrameResized(width, height);
+	SetTimeFont();
+}
+
+/**/
 
 void
 MainView::SetLabelColors()
@@ -152,26 +218,16 @@ MainView::SetTimeFont()
 	// lblDate->SetFont(smallFont);
 }
 
-status_t
-MainView::Archive(BMessage* data, bool deep) const
+void
+MainView::ShowAbout()
 {
-	(void)deep; // unused-parameter
-
-	// Don't archive the child views - we'll do it ourselves
-	status_t status = BView::Archive(data, false);
-	data->AddString("class", "MainView");
-	data->AddString("add_on", appSignature);
-	data->AddFloat("MainView::bigSize", bigFont->Size());
-	data->AddFloat("MainView::smallSize", smallFont->Size());
-
-	return status;
-}
-
-BArchivable*
-MainView::Instantiate(BMessage *data)
-{
-	if (validate_instantiation(data, "MainView")) return new MainView(data);
-	return NULL;
+	BAlert *alert = new BAlert(
+		"about",
+		"BigClock v0.1.1a\n"
+		"Copyright 2019-2023 Parnikkapore",
+		"OK"
+	);
+	alert->Go();
 }
 
 void
@@ -189,53 +245,4 @@ MainView::Tick()
 	formatted = "";
 	fmDate.Format(formatted, curTime, B_FULL_DATE_FORMAT);
 	lblDate->SetText(formatted);
-}
-
-void
-MainView::Pulse()
-{
-	this->Tick();
-}
-
-void
-MainView::ShowAbout()
-{
-	BAlert *alert = new BAlert(
-		"about",
-		"BigClock v0.1.1a\n"
-		"Copyright 2019-2023 Parnikkapore",
-		"OK"
-	);
-	alert->Go();
-}
-
-void
-MainView::FrameResized(float width, float height)
-{
-	BView::FrameResized(width, height);
-
-	SetTimeFont();
-}
-
-void
-MainView::MessageReceived(BMessage *msg)
-{
-	switch (msg->what) {
-		case M_Tick:
-			Tick();
-			break;
-		case B_ABOUT_REQUESTED:
-			ShowAbout();
-			break;
-		default:
-			BView::MessageReceived(msg);
-			break;
-	}
-}
-
-bool
-MainWindow::QuitRequested(void)
-{
-	be_app->PostMessage(B_QUIT_REQUESTED);
-	return true;
 }
