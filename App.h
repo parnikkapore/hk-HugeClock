@@ -7,10 +7,10 @@
 class App : public BApplication
 {
 public:
-	App(void);
-	
+    App(void);
+    
 private:
-	MainWindow* mainwin;
+    MainWindow* mainwin;
 };
 
 #endif
