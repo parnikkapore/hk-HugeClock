@@ -15,8 +15,7 @@
 
 #include "MainWindow.h"
 
-// Message codes
-enum {
+enum MessageCodes {
     M_Tick = 'ctik'
 };
 
@@ -227,7 +226,7 @@ MainView::ShowAbout()
         "Copyright 2019-2023 Parnikkapore",
         "OK"
     );
-    alert->Go();
+    alert->Go(NULL);
 }
 
 void
